@@ -1,0 +1,30 @@
+- Inference is the process of using a trained LLM to generate human-like text from a given input prompt. Language models use their knowledge from training to formulate responses one word at a time. The model leverages learned probabilities from billions of parameters to predict and generate the next token in a sequence. This sequential generation is what allows LLMs to produce coherent and contextually relevant text.
+- When predicting the next word, not every word in a sentence carries equal weight - for example, in the sentence _“The capital of France is …”_, the words “France” and “capital” are crucial for determining that “Paris” should come next. This ability to focus on relevant information is what we call attention.
+- This process of identifying the most relevant words to predict the next token has proven to be incredibly effective.
+- The context length refers to the maximum number of tokens (words or parts of words) that the LLM can process at once. Think of it as the size of the model’s working memory.
+- Careful design of the prompt makes it easier **to guide the generation of the LLM toward the desired output**.
+- 2 phases of inference proces:
+	- Prefill - computational intensive phase because it needs to process all input tokens at once.
+		- Tokenization - Converting the input text into tokens (think of these as the basic building blocks the model understands)
+		- Embedding conversion - Transforming these tokens into numerical representations that capture their meaning
+		- Initial Processing - Running these embeddings through the model’s neural networks to create a rich understanding of the context
+	- Decode - this is where the actual text generation happens. The model generates one token at a time in what we call an autoregressive process (where each new token depends on all previous tokens).
+		- Attention computation - Looking back at all previous tokens to understand context
+		- Probability Calculation - Determining the likelihood of each possible next token
+		- Token Selection - Choosing the next token based on these probabilities
+		- Continuation Check - Deciding whether to continue or stop generation
+- When the model needs to choose the next token, it starts with raw probabilities (called logits) for every word in its vocabulary.
+![[Pasted image 20250705021647.png]]
+- **Temperature Control**: Like a creativity dial - higher settings (>1.0) make choices more random and creative, lower settings (<1.0) make them more focused and deterministic
+- **Top-p (Nucleus) Sampling**: Instead of considering all possible words, we only look at the most likely ones that add up to our chosen probability threshold (e.g., top 90)
+- **Top-k Filtering**: An alternative approach where we only consider the k most likely next words
+- Beam Search - Looking ahead for better Coherence
+	- Instead of committing to a single choice at each step, it explores multiple possible paths simultaneously - like a chess player thinking several moves ahead.
+- 4 performance metrics for LLM inference:
+	- Time to First Token (TTFT) - How quickly can you get the first response?
+	- Time per output token (TPOT) - How fast can you generate subsequent tokens?
+	- Throughput - How many requests can you handle simultaneously?
+	- VRAM usage - How much GPU memory do you need?
+- Larger context window increases resource consumption and latency in inference
+- the original model you are using could very easily generate sexist, racist, or homophobic content. Fine-tuning the model on your data won’t make this intrinsic bias disappear.
+- 
